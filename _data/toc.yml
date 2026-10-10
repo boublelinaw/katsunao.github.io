@@ -1,0 +1,22 @@
+home_title: 首頁
+items:
+  - title: 個人簡介
+    subtitle: Profile
+    page: _data/pages/profile.yml
+    children:
+      - title: 爆豪 勝己
+        page: _data/pages/bakugo.yml
+      - title: 小森 尚
+        page: _data/pages/nao.yml
+  - title: 時間軸
+    subtitle: Timeline
+    page: _data/pages/timeline.yml
+    children: []
+  - title: 關於兩人
+    subtitle: About Us
+    page: _data/pages/about.yml
+    children: []
+  - title: 創作相關
+    subtitle: Works
+    page: _data/pages/works.yml
+    children: []

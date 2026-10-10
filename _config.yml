@@ -1,0 +1,8 @@
+# KatsuNao 夢向網站 — Jekyll 設定（一般不需要修改）
+title: KatsuNao
+lang: zh-Hant-TW
+timezone: Asia/Taipei
+exclude:
+  - README.md
+  - docs
+  - .pages.yml

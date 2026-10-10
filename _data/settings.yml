@@ -1,0 +1,30 @@
+site_title: KatsuNao
+cover:
+  title: KatsuNao
+  subtitle: "#KatsuNao　#勝尚限速"
+  quote: 星點火花恣意迸發，引爆於心廊迴盪。
+  open_text: 翻開這本書
+counter:
+  enabled: true
+  start: "2024-09-27 00:00"
+  units: zh
+  caption: ""
+forest:
+  quotes:
+    - 根深枝葉茂。
+    - 星點火花恣意迸發，引爆於心廊迴盪。
+  hint: 輕觸書本
+  skip_after: 5
+music:
+  youtube: ""
+  file: ""
+  volume: 40
+chat:
+  left_name: 爆豪
+  left_avatar: ""
+  right_name: 小森
+  right_avatar: ""
+fonts:
+  heading: Noto Serif TC
+  body: Noto Serif TC
+footer: KatsuNao｜爆豪勝己 × 小森尚｜非官方夢向網站

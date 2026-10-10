@@ -1,0 +1,140 @@
+title: 爆豪 勝己
+subtitle: Bakugo Katsuki
+kind: page
+icon: wolf
+icon_image: ""
+motto: ""
+blocks:
+  - _block: heading
+    text: 簡介
+    level: h2
+  - _block: info
+    rows:
+      - label: 姓名
+        value: 爆豪勝己（Bakugo Katsuki）
+      - label: 英雄名
+        value: 大·爆·殺·神 ダイナマイト（Dynamight）
+  - _block: text
+    body: 畢業於雄英高中英雄科，現為自立事務所的職業英雄。個性為**爆破**，手掌的汗腺產生異變，會分泌能硝酸甘油般的汗水並自由自在引爆。性格為生性暴躁但心思細膩的才能Man，喜歡辛辣的食物和登山。
+  - _block: heading
+    text: 基本資料
+    level: h2
+  - _block: info
+    rows:
+      - label: 生日
+        value: "0420"
+      - label: 身高
+        value: 高中172cm，成年後185cm
+      - label: 出身地
+        value: 靜岡縣一帶
+      - label: 代表色
+        value: 橘色、墨綠色（偏深色系、濃色系）
+      - label: 動物塑
+        value: 狼
+      - label: 喜歡的事物
+        value: 辛辣的食物、登山
+      - label: 喜歡的英雄
+        value: 歐爾麥特
+  - _block: radar
+    title: Hero's Status
+    note: 各方面都有進步呢！
+    charts:
+      - name: 高中
+        axes:
+          - label: 力量
+            grade: A
+          - label: 速度
+            grade: A
+          - label: 技巧
+            grade: A+
+          - label: 智力
+            grade: A
+          - label: 用字遣詞
+            grade: E
+      - name: 成年
+        axes:
+          - label: 力量
+            grade: A+
+          - label: 速度
+            grade: S
+          - label: 技巧
+            grade: A
+          - label: 智力
+            grade: A+
+          - label: 用字遣詞
+            grade: C
+  - _block: heading
+    text: 個性
+    level: h2
+  - _block: note
+    title: 爆破（ばくは）💥
+    tone: fire
+    body: 手掌的汗腺產生異變，會分泌能硝酸甘油般的汗水並自由自在引爆，爆炸威力與出汗程度成正比，所以夏天時爆發性強大，冬天則啟動較為緩慢。
+  - _block: text
+    body: "- 招式：（待新增）"
+  - _block: heading
+    text: 家庭背景
+    level: h2
+  - _block: text
+    body: |-
+      - 父親：爆豪勝，母親：爆豪光己
+      - 爆豪是獨生子
+      - 母親個性火爆、父親個性溫和被動
+      - 家庭氛圍屬於「母親主導、父親配合」的模式
+      - 爆豪會稱呼媽媽為臭老太婆，父親則稱呼死老頭、老爸等
+  - _block: heading
+    text: 性格、特質
+    level: h2
+  - _block: quote
+    text: 生性暴躁但心思細膩的才能Man
+    cite: 一句話形容爆豪勝己
+  - _block: text
+    body: |-
+      - 暴言自信家：說話的語氣粗暴，對自己非常有自信
+      - 才能Man：學業成績相當優異，實戰能力極強，雄英入學成績第一，高一體育祭第一名（雖然本人非常排斥，因為覺得不是自己踏實贏下的）。廚藝極好，在文化祭上展示了自己在音樂（爵士鼓）上的天賦。各方面都非常優秀，學什麼都很快。
+      - 傲嬌（爆嬌）
+      - 自尊心、責任心都很強
+      - 屬於又兇又聽話的類型
+      - 觀察力很強，也很敏銳，是心思細膩的人
+      - 喜歡跟著強者學習，對厲害、於自己有恩的長輩抱著尊敬之心
+      - 行事風格看似粗暴，其實內含著縝密的思慮、精準的判斷力和高智商
+      - 兇巴巴的語氣和態度大概是焊在骨子裡了，不善言辭，也不擅長說心裡話
+      - 因為過去幾乎什麼都難不倒他，但在進入雄英後開始意識到自己的不足，會自己反省思考很多，從而自我成長
+  - _block: heading
+    text: 經歷
+    level: h2
+  - _block: heading
+    text: 幼年
+    level: h3
+  - _block: text
+    body: |-
+      - 孩子王
+      - 對自己的能力感到自豪
+      - 憧憬歐爾麥特
+      - 與綠谷為童年玩伴
+  - _block: heading
+    text: 初中（折寺國中）
+    level: h3
+  - _block: text
+    body: |-
+      - 驕傲自大
+      - 欺負霸凌無個性的綠谷
+      - 夢想是成為超越歐爾麥特的英雄，並在高額納稅榜上留名
+  - _block: heading
+    text: 進入雄英後
+    level: h3
+  - _block: text
+    body: （待新增）
+  - _block: heading
+    text: 畢業後成年：約25歲
+    level: h3
+  - _block: text
+    body: |-
+      畢業後加入Best Jeanist 的事務所成為搭檔，隨後獨立。實力與百萬同等甚至被評價在其之上，但言行粗暴的壞習慣一直沒改，導致排名難以提升。與他人組隊時，評價會不可思議地上升！？深受前輩英雄們的疼愛。
+
+      英雄排名：No.4（初登場）→ No.15 → No.5
+  - _block: heading
+    text: 與原作角色的關係
+    level: h2
+  - _block: text
+    body: （待新增）

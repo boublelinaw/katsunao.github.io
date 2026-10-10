@@ -1,0 +1,40 @@
+title: 個人簡介
+subtitle: Profile
+kind: page
+icon: both
+icon_image: ""
+motto: ""
+blocks:
+  - _block: card
+    name: 爆豪 勝己
+    subtitle: Bakugo Katsuki｜大·爆·殺·神 ダイナマイト
+    icon: wolf
+    image: ""
+    body: 生性暴躁但心思細膩的才能Man。畢業於雄英高中英雄科，現為自立事務所的職業英雄，個性為「爆破」。
+    link: _data/pages/bakugo.yml
+    link_text: 前往更多設定
+  - _block: card
+    name: 小森 尚
+    subtitle: Komori Nao｜シルヴィア（Sylvia）
+    icon: rabbit
+    image: ""
+    body: 乖巧禮貌但內心戲多的森林系少女。畢業於雄英高中英雄科，現為職業英雄．森林神威的搭檔，個性為「木靈」。
+    link: _data/pages/nao.yml
+    link_text: 前往更多設定
+  - _block: heading
+    text: 兩人的關係
+    level: h2
+  - _block: text
+    body: 同於雄英高中英雄科A班畢業，從既懼怕又好奇，到逐漸理解、靠近。兩人自高三開始交往，小森看似溫柔、禮貌卻時常想很多，爆豪看似暴躁、蠻橫卻心思細膩穩定，內外相反且互補、互相珍視對方的情侶關係。
+  - _block: chips
+    label: 交往前
+    items:
+      - 同班同學
+      - 初印象差
+      - 日久生情
+  - _block: chips
+    label: 交往後
+    items:
+      - 相反的你和我
+      - 互補型關係
+      - 爆豪勝己你就寵她吧

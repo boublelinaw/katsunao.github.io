@@ -1,0 +1,408 @@
+# Pages CMS 後台設定檔
+# 這個檔案決定後台會出現哪些欄位。一般不需要修改。
+
+media:
+  input: assets/uploads
+  output: assets/uploads
+  categories: [image, audio]
+
+components:
+  # ───── 共用的「對話訊息」欄位 ─────
+  messages:
+    label: 對話訊息
+    type: object
+    list: true
+    fields:
+      - name: side
+        label: 哪一邊
+        type: select
+        default: left
+        options:
+          values:
+            - { value: left, label: 左邊（爆豪） }
+            - { value: right, label: 右邊（小森） }
+      - name: name
+        label: 顯示名稱（留空 = 使用網站設定的預設名稱）
+        type: string
+      - name: avatar
+        label: 頭貼（留空 = 使用預設頭貼）
+        type: image
+      - name: text
+        label: 訊息內容
+        type: text
+
+  # ───── 區塊：像 Notion 一樣自由新增、刪除、排序 ─────
+  blocks:
+    label: 內容區塊
+    type: block
+    list: true
+    blocks:
+      - name: heading
+        label: 標題
+        fields:
+          - { name: text, label: 標題文字, type: string }
+          - name: level
+            label: 大小
+            type: select
+            default: h2
+            options:
+              values:
+                - { value: h2, label: 大標題 }
+                - { value: h3, label: 小標題 }
+      - name: text
+        label: 段落文字
+        fields:
+          - name: body
+            label: 內文（可用粗體、清單、連結、插入圖片）
+            type: rich-text
+      - name: info
+        label: 資料表（項目：內容）
+        fields:
+          - name: rows
+            label: 資料列
+            type: object
+            list: true
+            fields:
+              - { name: label, label: 項目, type: string }
+              - { name: value, label: 內容, type: text }
+      - name: radar
+        label: 雷達圖（Hero's Status）
+        fields:
+          - { name: title, label: 圖表標題, type: string }
+          - { name: note, label: 圖表下方小字備註, type: string }
+          - name: charts
+            label: 圖表（可放多張並排，例如高中／成年）
+            type: object
+            list: true
+            fields:
+              - { name: name, label: 圖表名稱（例如：高中）, type: string }
+              - name: axes
+                label: 數值項目（幾項就是幾邊形）
+                type: object
+                list: true
+                fields:
+                  - { name: label, label: 項目名稱, type: string }
+                  - name: grade
+                    label: 等級
+                    type: select
+                    default: C
+                    options:
+                      values: [S+, S, S-, A+, A, A-, B+, B, B-, C+, C, C-, D+, D, D-, E+, E, E-]
+      - name: quote
+        label: 引言／代表句
+        fields:
+          - { name: text, label: 句子, type: text }
+          - { name: cite, label: 出處或說明（可留空）, type: string }
+      - name: note
+        label: 提示框
+        fields:
+          - { name: title, label: 標題, type: string }
+          - name: tone
+            label: 色調
+            type: select
+            default: fire
+            options:
+              values:
+                - { value: fire, label: 火光橘（爆豪） }
+                - { value: leaf, label: 葉綠（小森） }
+                - { value: wood, label: 木棕（中性） }
+          - { name: body, label: 內文, type: rich-text }
+      - name: fold
+        label: 摺疊區塊
+        fields:
+          - { name: title, label: 摺疊標題, type: string }
+          - { name: open, label: 預設展開, type: boolean, default: false }
+          - { name: body, label: 內文, type: rich-text }
+      - name: chat
+        label: 訊息對話
+        fields:
+          - { name: title, label: 標題（有填就會變成可摺疊）, type: string }
+          - { name: collapsed, label: 預設收起, type: boolean, default: false }
+          - name: messages
+            component: messages
+      - name: timeline
+        label: 時間線節點
+        fields:
+          - { name: title, label: 時間線標題, type: string }
+          - { name: subtitle, label: 時間線副標, type: string }
+          - { name: body, label: 內文, type: rich-text }
+          - { name: chat_title, label: 摺疊頁標題, type: string, default: 兩人對彼此的看法 }
+          - name: messages
+            component: messages
+      - name: card
+        label: 角色卡片
+        fields:
+          - { name: name, label: 名字, type: string }
+          - { name: subtitle, label: 副標, type: string }
+          - name: icon
+            label: 預設圖示
+            type: select
+            default: none
+            options:
+              values:
+                - { value: wolf, label: 狼 }
+                - { value: rabbit, label: 垂耳兔 }
+                - { value: none, label: 不使用 }
+          - { name: image, label: 頭像圖片（會取代預設圖示）, type: image }
+          - { name: body, label: 簡介, type: text }
+          - name: link
+            label: 連結到哪一頁
+            type: reference
+            options:
+              collection: pages
+              value: "{path}"
+              label: "{title}"
+              search: title
+          - { name: link_text, label: 按鈕文字, type: string, default: 前往更多設定 }
+      - name: chips
+        label: 標籤列（＃標籤）
+        fields:
+          - { name: label, label: 標籤列名稱（可留空）, type: string }
+          - { name: items, label: 標籤, type: string, list: true }
+      - name: image
+        label: 圖片
+        fields:
+          - { name: src, label: 圖片, type: image }
+          - { name: caption, label: 圖片說明, type: string }
+          - name: size
+            label: 寬度
+            type: select
+            default: full
+            options:
+              values:
+                - { value: full, label: 滿版 }
+                - { value: medium, label: 中 }
+                - { value: small, label: 小 }
+      - name: chapter
+        label: 章節小標（例如 0629 · 1369 km）
+        fields:
+          - { name: text, label: 文字, type: string }
+      - name: divider
+        label: 分隔線
+        fields:
+          - name: style
+            label: 樣式
+            type: select
+            default: spark
+            options:
+              values:
+                - { value: spark, label: 火花 }
+                - { value: leaf, label: 葉子 }
+                - { value: line, label: 細線 }
+
+content:
+  # ───────────────── 網站設定 ─────────────────
+  - name: settings
+    label: ⚙️ 網站設定
+    type: file
+    path: _data/settings.yml
+    format: yaml
+    fields:
+      - { name: site_title, label: 網站名稱（瀏覽器分頁標題）, type: string }
+      - name: cover
+        label: 📕 書封
+        type: object
+        fields:
+          - { name: title, label: 書名, type: string }
+          - { name: subtitle, label: 書名下方小字, type: string }
+          - { name: quote, label: 代表句, type: text }
+          - { name: open_text, label: 翻開按鈕文字, type: string }
+      - name: counter
+        label: ⏳ 交往計時器
+        type: object
+        fields:
+          - { name: enabled, label: 顯示計時器, type: boolean, default: true }
+          - name: start
+            label: 起始時間（台北時間，格式：2024-09-27 00:00）
+            type: string
+            pattern: { regex: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$", message: "格式請用 2024-09-27 00:00" }
+          - name: units
+            label: 單位文字
+            type: select
+            default: zh
+            options:
+              values:
+                - { value: zh, label: 中文（天 時 分 秒） }
+                - { value: en, label: 英文（D H M S） }
+                - { value: none, label: 不顯示 }
+          - { name: caption, label: 計時器上方小字（可留空）, type: string }
+      - name: forest
+        label: 🌲 開場森林
+        type: object
+        fields:
+          - { name: quotes, label: 森林中浮現的句子, type: string, list: true }
+          - { name: hint, label: 提示拾起書本的文字, type: string }
+          - { name: skip_after, label: 幾秒後出現「跳過」, type: number, default: 5 }
+      - name: music
+        label: 🎵 背景音樂
+        type: object
+        fields:
+          - { name: youtube, label: YouTube 網址（貼上影片連結即可）, type: string }
+          - { name: file, label: 或上傳音檔（mp3；有上傳就優先使用）, type: file }
+          - { name: volume, label: 音量（0～100）, type: number, default: 40 }
+      - name: chat
+        label: 💬 對話框預設值
+        type: object
+        fields:
+          - { name: left_name, label: 左邊預設名稱, type: string }
+          - { name: left_avatar, label: 左邊預設頭貼（留空 = 狼）, type: image }
+          - { name: right_name, label: 右邊預設名稱, type: string }
+          - { name: right_avatar, label: 右邊預設頭貼（留空 = 垂耳兔）, type: image }
+      - name: fonts
+        label: 🔤 字體
+        type: object
+        fields:
+          - name: heading
+            label: 標題字體
+            type: select
+            default: Noto Serif TC
+            options:
+              values: &fonts
+                - { value: Noto Serif TC, label: 思源明體（書本感） }
+                - { value: Noto Sans TC, label: 思源黑體（現代簡潔） }
+                - { value: LXGW WenKai TC, label: 霞鶩文楷（溫柔手寫感） }
+                - { value: Iansui, label: 芫荽（圓潤手寫感） }
+          - name: body
+            label: 內文字體
+            type: select
+            default: Noto Serif TC
+            options:
+              values: *fonts
+      - { name: footer, label: 頁尾文字, type: string }
+
+  # ───────────────── 首頁（世界觀＋入內須知） ─────────────────
+  - name: home
+    label: 🏠 首頁：世界觀與入內須知
+    type: file
+    path: _data/home.yml
+    format: yaml
+    fields:
+      - { name: worldview_title, label: 世界觀標題, type: string }
+      - { name: worldview, label: 世界觀內容, component: blocks }
+      - { name: notice_title, label: 入內須知標題, type: string }
+      - { name: notice, label: 入內須知內容, component: blocks }
+      - { name: contact_label, label: 聯繫方式標題, type: string }
+      - { name: contact_url, label: 聯繫方式連結（網址）, type: string }
+      - { name: contact_text, label: 連結顯示文字（留空 = 顯示網址）, type: string }
+      - { name: agree_text, label: 同意按鈕文字, type: string }
+
+  # ───────────────── 目錄 ─────────────────
+  - name: toc
+    label: 📑 目錄
+    type: file
+    path: _data/toc.yml
+    format: yaml
+    fields:
+      - { name: home_title, label: 回首頁的連結名稱, type: string }
+      - name: items
+        label: 大標題（可拖曳排序）
+        type: object
+        list: true
+        fields:
+          - { name: title, label: 大標題, type: string }
+          - { name: subtitle, label: 英文小字, type: string }
+          - name: page
+            label: 點擊後前往的頁面
+            type: reference
+            options: { collection: pages, value: "{path}", label: "{title}", search: title }
+          - name: children
+            label: 小標題
+            type: object
+            list: true
+            fields:
+              - { name: title, label: 小標題, type: string }
+              - name: page
+                label: 點擊後前往的頁面
+                type: reference
+                options: { collection: pages, value: "{path}", label: "{title}", search: title }
+
+  # ───────────────── 頁面 ─────────────────
+  - name: pages
+    label: 📄 頁面
+    type: collection
+    path: _data/pages
+    format: yaml
+    filename: "{year}{month}{day}-{hour}{minute}{second}.yml"
+    view:
+      fields: [title, subtitle]
+      primary: title
+    fields:
+      - { name: title, label: 頁面標題, type: string, required: true }
+      - { name: subtitle, label: 英文小字, type: string }
+      - name: kind
+        label: 頁面類型
+        type: select
+        default: page
+        options:
+          values:
+            - { value: page, label: 一般頁面 }
+            - { value: works, label: 創作列表（自動列出所有創作） }
+      - name: icon
+        label: 頁首圖示
+        type: select
+        default: none
+        options:
+          values:
+            - { value: wolf, label: 狼 }
+            - { value: rabbit, label: 垂耳兔 }
+            - { value: both, label: 狼＋垂耳兔 }
+            - { value: none, label: 不顯示 }
+      - { name: icon_image, label: 自訂頁首圖片（會取代圖示）, type: image }
+      - { name: motto, label: 代表句（顯示在頁面頂部）, type: text }
+      - { name: blocks, label: 內容區塊, component: blocks }
+
+  # ───────────────── 創作 ─────────────────
+  - name: creations
+    label: ✍️ 創作
+    type: collection
+    path: _data/creations
+    format: yaml
+    filename: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
+    view:
+      fields: [title, date]
+      primary: title
+      sort: [date, title]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: 標題, type: string, required: true }
+      - { name: date, label: 日期, type: date }
+      - name: category
+        label: 分類
+        type: reference
+        options: { collection: categories, value: "{path}", label: "{title}", search: title }
+      - name: tags
+        label: 標籤（可複選）
+        type: reference
+        options: { collection: tags, value: "{path}", label: "{title}", search: title, multiple: true }
+      - { name: cover, label: 預覽圖片, type: image }
+      - { name: summary, label: 簡介, type: text }
+      - { name: notes, label: 前言／預警（顯示在文章開頭的提示框）, type: rich-text }
+      - { name: blocks, label: 內文區塊, component: blocks }
+
+  - name: categories
+    label: 🗂️ 創作分類
+    type: collection
+    path: _data/categories
+    format: yaml
+    filename: "cat-{year}{month}{day}-{hour}{minute}{second}.yml"
+    view:
+      fields: [title, order]
+      primary: title
+      default: { sort: order, order: asc }
+    fields:
+      - { name: title, label: 分類名稱, type: string, required: true }
+      - { name: order, label: 排序（數字小的在前）, type: number, default: 10 }
+
+  - name: tags
+    label: 🏷️ 創作標籤
+    type: collection
+    path: _data/tags
+    format: yaml
+    filename: "tag-{year}{month}{day}-{hour}{minute}{second}.yml"
+    view:
+      fields: [title, order]
+      primary: title
+      default: { sort: order, order: asc }
+    fields:
+      - { name: title, label: 標籤名稱, type: string, required: true }
+      - { name: order, label: 排序（數字小的在前）, type: number, default: 10 }
