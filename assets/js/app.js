@@ -168,13 +168,18 @@
           ${blocks(h.notice)}
           <p class="contact"><strong>${esc(h.contact_label || '我的聯繫方式')}：</strong>${contact}</p>
         </section>
-        ${withAgree ? `<div class="agree-wrap"><button class="btn-agree" id="btn-agree" type="button">${esc(h.agree_text || '同意並進入')}</button></div>` : ''}
+        ${withAgree ? `<div class="agree-wrap"><button class="btn-seal" id="btn-agree" type="button"><span class="seal">${A.SEAL}</span><span class="seal-text">${esc(h.agree_text || '同意並進入')}</span></button><p class="seal-hint">按下封蠟，即表示同意以上須知</p></div>` : ''}
       </div>`;
   }
 
   function renderHomeInto(el, onAgree) {
     el.innerHTML = homeHTML(true);
-    el.querySelector('#btn-agree').addEventListener('click', onAgree);
+    const btn = el.querySelector('#btn-agree');
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('pressed')) return;
+      btn.classList.add('pressed');
+      setTimeout(onAgree, 520);
+    });
   }
 
   /* ───── 目錄 ───── */
@@ -306,6 +311,13 @@
     return `<div class="paper page"><p class="empty">找不到這一頁。<a href="#/toc">回到目錄</a></p></div>`;
   }
 
+  function addCorners(root) {
+    root.querySelectorAll('.paper').forEach((p) => {
+      if (p.querySelector(':scope > .corner')) return;
+      p.insertAdjacentHTML('afterbegin', ['tl', 'tr', 'bl', 'br'].map((c) => `<span class="corner ${c}" aria-hidden="true">${A.CORNER}</span>`).join(''));
+    });
+  }
+
   /* ───── 路由 ───── */
   function route() {
     const raw = location.hash.replace(/^#\/?/, '');
@@ -319,6 +331,7 @@
     else html = viewTOC();
     const view = $('view');
     view.innerHTML = html;
+    addCorners(view);
     view.classList.remove('enter');
     void view.offsetWidth;
     view.classList.add('enter');
@@ -335,7 +348,7 @@
     const body = f.body || 'Noto Serif TC';
     const fam = (name) => `family=${name.trim().replace(/ /g, '+')}${/Iansui/.test(name) ? '' : ':wght@400;700'}`;
     const set = Array.from(new Set([head, body]));
-    $('font-link').href = `https://fonts.googleapis.com/css2?${set.map(fam).join('&')}&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&display=swap`;
+    $('font-link').href = `https://fonts.googleapis.com/css2?${set.map(fam).join('&')}&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap`;
     const stack = (n) => `"${n}", "Noto Serif TC", "Songti TC", "PMingLiU", serif`;
     document.documentElement.style.setProperty('--font-head', stack(head));
     document.documentElement.style.setProperty('--font-body', stack(body));
@@ -414,13 +427,15 @@
   function startEmbers() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     embersFX = window.KN_INTRO.createFX($('embers'));
-    embersFX.cfg.embers = 0.05;
+    embersFX.cfg.embers = 0.02;
+    embersFX.cfg.motes = 0.06;
   }
 
   /* ───── 啟動 ───── */
   function enterSite() {
     document.body.classList.remove('is-intro');
     $('app').hidden = false;
+    $('bg-candles').innerHTML = A.candles(7, 19, [2, 75]);
     if (!location.hash || location.hash === '#' || location.hash === '#/') location.hash = '#/toc';
     route();
     window.addEventListener('hashchange', route);

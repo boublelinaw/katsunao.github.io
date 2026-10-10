@@ -12,7 +12,7 @@
     const ctx = canvas.getContext('2d');
     let W = 0, H = 0, DPR = 1;
     const parts = [];
-    const cfg = { leaves: 0, fireflies: 0, embers: 0 };
+    const cfg = { leaves: 0, fireflies: 0, embers: 0, motes: 0 };
     let running = true;
 
     function resize() {
@@ -48,6 +48,21 @@
           vx: (Math.random() - 0.5) * 0.4, vy: -(0.5 + Math.random() * 1.3),
           s: 0.8 + Math.random() * 1.8, life: 220 + Math.random() * 260, ph: Math.random() * 6.28,
         });
+      } else if (type === 'mote') {
+        Object.assign(p, {
+          x: Math.random() * W, y: H * (0.25 + Math.random() * 0.8),
+          vx: (Math.random() - 0.5) * 0.25, vy: -(0.15 + Math.random() * 0.45),
+          s: 0.6 + Math.random() * 1.6, life: 260 + Math.random() * 320, ph: Math.random() * 6.28,
+          star: Math.random() < 0.18,
+        });
+      } else if (type === 'swirl') {
+        Object.assign(p, {
+          cx: extra.x, cy: extra.y, a: Math.random() * Math.PI * 2,
+          r: extra.r * (0.6 + Math.random() * 0.6), w: 0.05 + Math.random() * 0.05,
+          s: 0.8 + Math.random() * 1.5, life: 140, px: null, py: null,
+          gold: Math.random() < 0.75,
+        });
+        p.x = p.cx + Math.cos(p.a) * p.r; p.y = p.cy + Math.sin(p.a) * p.r;
       } else if (type === 'spark') {
         const a = Math.random() * Math.PI * 2;
         const sp = (extra.power || 1) * (2 + Math.random() * 7);
@@ -57,7 +72,12 @@
           life: 40 + Math.random() * 55, s: 1 + Math.random() * 1.6,
         });
       }
+      if (type === 'spark') p.gold = Math.random() < 0.55;
       parts.push(p);
+    }
+
+    function swirl(x, y, n, r) {
+      for (let i = 0; i < n; i++) spawn('swirl', { x, y, r });
     }
 
     function burst(x, y, n, power) {
@@ -76,6 +96,7 @@
       if (Math.random() < cfg.leaves) spawn('leaf');
       if (count('firefly') < cfg.fireflies && Math.random() < 0.15) spawn('firefly');
       if (Math.random() < cfg.embers) spawn('ember');
+      if (Math.random() < cfg.motes) spawn('mote');
 
       for (let i = parts.length - 1; i >= 0; i--) {
         const p = parts[i];
@@ -124,12 +145,44 @@
           ctx.fillStyle = `rgba(255,140,60,${a * 0.08})`;
           ctx.beginPath(); ctx.arc(p.x, p.y, p.s * 3, 0, Math.PI * 2); ctx.fill();
           ctx.globalCompositeOperation = 'source-over';
+        } else if (p.type === 'mote') {
+          p.ph += 0.08;
+          p.x += p.vx + Math.sin(p.ph * 0.5) * 0.2;
+          p.y += p.vy;
+          const fade = Math.min(1, p.age / 50, (p.life - p.age) / 50);
+          const a = (0.35 + 0.65 * Math.abs(Math.sin(p.ph))) * fade;
+          ctx.globalCompositeOperation = 'lighter';
+          if (p.star) {
+            const L = p.s * 4 * a;
+            ctx.strokeStyle = `rgba(255,236,180,${a})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath(); ctx.moveTo(p.x - L, p.y); ctx.lineTo(p.x + L, p.y); ctx.moveTo(p.x, p.y - L); ctx.lineTo(p.x, p.y + L); ctx.stroke();
+          }
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.s * 3.5);
+          g.addColorStop(0, `rgba(255,230,160,${a})`);
+          g.addColorStop(1, 'rgba(255,200,110,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.s * 3.5, 0, Math.PI * 2); ctx.fill();
+          ctx.globalCompositeOperation = 'source-over';
+        } else if (p.type === 'swirl') {
+          p.px = p.x; p.py = p.y;
+          p.a += p.w; p.r *= 0.965; p.w *= 1.012;
+          p.x = p.cx + Math.cos(p.a) * p.r; p.y = p.cy + Math.sin(p.a) * p.r * 0.55;
+          if (p.r < 3) p.age = p.life;
+          const a = Math.min(1, p.age / 15);
+          ctx.globalCompositeOperation = 'lighter';
+          ctx.strokeStyle = p.gold ? `rgba(255,222,140,${a})` : `rgba(255,140,60,${a})`;
+          ctx.lineWidth = p.s; ctx.lineCap = 'round';
+          ctx.beginPath(); ctx.moveTo(p.px, p.py); ctx.lineTo(p.x, p.y); ctx.stroke();
+          ctx.globalCompositeOperation = 'source-over';
         } else if (p.type === 'spark') {
           p.px = p.x; p.py = p.y;
           p.vx *= 0.975; p.vy = p.vy * 0.975 + 0.07;
           p.x += p.vx; p.y += p.vy;
           const t = p.age / p.life;
-          const col = t < 0.25 ? '255,247,214' : t < 0.6 ? '255,200,90' : '255,110,40';
+          const col = p.gold
+            ? (t < 0.3 ? '255,250,228' : t < 0.7 ? '255,224,140' : '214,165,74')
+            : (t < 0.25 ? '255,247,214' : t < 0.6 ? '255,200,90' : '255,110,40');
           ctx.globalCompositeOperation = 'lighter';
           ctx.strokeStyle = `rgba(${col},${1 - t})`;
           ctx.lineWidth = p.s;
@@ -144,7 +197,7 @@
     requestAnimationFrame(frame);
 
     return {
-      cfg, burst, resize,
+      cfg, burst, swirl, resize,
       stop() { running = false; ctx.clearRect(0, 0, W, H); parts.length = 0; },
       start() { if (!running) { running = true; resize(); requestAnimationFrame(frame); } },
     };
@@ -240,12 +293,15 @@
       forest.appendChild(el);
       return el;
     });
-    const path = document.createElement('div');
-    path.className = 'trail';
-    forest.appendChild(path);
-
-    $('egg-wolf').innerHTML = `<div class="trunk"></div><div class="peek">${A.WOLF}</div>`;
-    $('egg-rabbit').innerHTML = `<div class="bush"><svg viewBox="0 0 120 64" preserveAspectRatio="none"><g fill="#121614"><circle cx="22" cy="44" r="22"/><circle cx="52" cy="32" r="28"/><circle cx="86" cy="40" r="24"/><circle cx="108" cy="50" r="16"/><rect x="0" y="48" width="120" height="16"/></g><g fill="#1b231c"><circle cx="46" cy="22" r="6"/><circle cx="80" cy="28" r="5"/></g></svg></div><div class="peek">${A.RABBIT}</div>`;
+    ['mist mist-back', 'mist mist-front'].forEach((c, i) => {
+      const m = document.createElement('div');
+      m.className = c;
+      forest.insertBefore(m, layers[i === 0 ? 2 : 3]);
+    });
+    $('candles').innerHTML = A.candles(14, 7, [4, 52]);
+    $('magic-circle').innerHTML = A.magicCircle();
+    $('cover-crest').innerHTML = A.CREST;
+    document.querySelectorAll('.cover .corner').forEach((c) => { c.innerHTML = A.CORNER; });
     $('book-small').innerHTML = A.BOOK_SMALL;
     document.querySelectorAll('.cover-ornament').forEach((o) => { o.innerHTML = A.ORNAMENT; });
   }
@@ -275,8 +331,9 @@
         l.style.transform = `translate3d(0, ${e * l._depth * 2}vh, 0) scale(${s.toFixed(4)})`;
       });
       setDark(0.04 + 0.56 * e);
-      fx.cfg.leaves = 0.16 * (1 - e * 0.7);
-      fx.cfg.fireflies = Math.round(e * 22);
+      fx.cfg.leaves = 0.07 * (1 - e);
+      fx.cfg.motes = 0.08 + e * 0.35;
+      fx.cfg.fireflies = Math.round(e * 10);
     }
     requestAnimationFrame(loop);
   }
@@ -301,8 +358,7 @@
     const quotes = (S.forest && S.forest.quotes) || [];
     const slot = WALK_MS / Math.max(quotes.length + 1, 2);
     quotes.forEach((q, i) => later(() => phase === 'forest' && showQuote(q, slot * 0.8), 900 + i * slot));
-    later(() => $('egg-wolf').classList.add('peeking'), WALK_MS * 0.32);
-    later(() => $('egg-rabbit').classList.add('peeking'), WALK_MS * 0.5);
+    later(() => $('intro').classList.add('candles-on'), WALK_MS * 0.3);
     later(() => $('clearing').classList.add('show'), WALK_MS * 0.82);
     later(() => $('hint').classList.add('show'), WALK_MS + 600);
 
@@ -328,10 +384,12 @@
     if (phase !== 'forest') return;
     phase = 'pickup';
     const intro = $('intro');
+    const r = $('book-small').getBoundingClientRect();
+    fx.swirl(r.left + r.width / 2, r.top + r.height / 2, 120, Math.max(window.innerWidth, 320) * 0.55);
     intro.classList.add('picked');
     animateDark(0.97, 1400);
     fx.cfg.leaves = 0;
-    fx.cfg.fireflies = 8;
+    fx.cfg.fireflies = 4;
     later(showCover, 900);
   }
 
@@ -339,7 +397,8 @@
     phase = 'cover';
     $('intro').classList.add('cover-on');
     $('skip').classList.remove('show');
-    fx.cfg.embers = 0.18;
+    fx.cfg.embers = 0.1;
+    fx.cfg.motes = 0.3;
     counter = createCounter($('counter'), S.counter || {});
   }
 
@@ -352,7 +411,8 @@
     $('forest-quote').classList.remove('show');
     setDark(0.97);
     fx.cfg.leaves = 0;
-    fx.cfg.fireflies = 8;
+    fx.cfg.fireflies = 4;
+    intro.classList.add('candles-on');
     showCover();
     requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.remove('instant')));
   }
@@ -365,10 +425,10 @@
     if (opts.renderHome) opts.renderHome(page, finish);
     intro.classList.add('opening');
     const r = $('book').getBoundingClientRect();
-    later(() => fx.burst(r.left + 6, r.top + r.height * 0.5, 90, 1), 250);
-    later(() => fx.burst(r.left + r.width * 0.5, r.top + r.height * 0.15, 60, 0.8), 450);
-    later(() => fx.burst(r.right - 6, r.top + r.height * 0.75, 60, 0.8), 650);
-    later(() => { intro.classList.add('expanded'); fx.cfg.embers = 0.3; }, 1100);
+    later(() => fx.burst(r.left + r.width * 0.5, r.top + r.height * 0.5, 160, 1.1), 300);
+    later(() => fx.burst(r.left + 6, r.top + r.height * 0.3, 70, 0.9), 520);
+    later(() => fx.burst(r.right - 6, r.top + r.height * 0.7, 70, 0.9), 700);
+    later(() => { intro.classList.add('expanded'); fx.cfg.embers = 0.22; }, 1100);
   }
 
   function finish() {
